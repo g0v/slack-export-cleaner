@@ -24,7 +24,7 @@ foreach (glob("input/*") as $f) {
                 $to = $s[2];
                 $to = preg_replace('#[a-zA-Z0-9-_]#', '_', $s[2]);
                 $to = $s[1] . $to;
-                //error_log("[$channel_file] {$s[1]}{$s[2]} => {$to}");
+                error_log("[$channel_file] {$s[1]}{$s[2]} => {$to}");
                 return $to;
             }, $content);
 
@@ -54,6 +54,11 @@ foreach (glob("input/*") as $f) {
                     }
                 }
                 $o->profile = $profile;
+                foreach ($o as $k => $v) {
+                    if (!in_array($k, ['id', 'team_id', 'name', 'profile'])) {
+                        unset($o->{$k});
+                    }
+                }
                 return $o;
             }, $obj);
             file_put_contents('output/users.json', json_encode($obj, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
